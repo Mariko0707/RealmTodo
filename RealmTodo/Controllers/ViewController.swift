@@ -79,5 +79,22 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
      }
     }
     
+    // 削除機能の登録
+    // editin..と打つとこれがドンと出てくる
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // 情報を消すのは１つからでは完全に消去したことにならないから注意！
+        
+        // Realmから対象のTodoを削除
+        let todo = todos[indexPath.row]
+        let realm = try! Realm()
+        try! realm.write {
+            realm.delete(todo)
+        }
+        // 配列todoから対象のTodoを削除
+        todos.remove(at: indexPath.row)
+        // 画面から対象のTodoを削除
+        tableView.deleteRows(at: [indexPath], with: .fade)
+    }
 }
 
